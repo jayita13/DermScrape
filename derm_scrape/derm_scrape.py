@@ -3,6 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 import urllib.request
 import csv
+import os
 
 chromedriver= "chromedriver.exe"
 browser = webdriver.Chrome(chromedriver)
@@ -19,9 +20,14 @@ opener = urllib.request.build_opener()
 opener.addheaders = [('User-Agent', 'MyApp/1.0')]
 urllib.request.install_opener(opener)
 
-# downloading the images.
+# Create folder to store images
+newpath = os.getcwd() + '/data'
+if not os.path.exists(newpath):
+    os.makedirs(newpath)
+
+# downloading the images
 for i in range(len(src)):    
-    urllib.request.urlretrieve(str(src[i]),"sample_data/derm{}.png".format(i+1))
+    urllib.request.urlretrieve(str(src[i]), newpath+"/derm{}.png".format(i+1))
 
 # list of name of disease
 dis = []
@@ -37,7 +43,7 @@ for i,j in zip(dis, src):
 # print(dst) 
 
 # storing dictionary to csv
-with open('test.csv', 'w') as csv_file:  
+with open('/test.csv', 'w', encoding='UTF8') as csv_file:  
     writer = csv.writer(csv_file)
     for key, value in dst.items():
        writer.writerow([key, value])   
